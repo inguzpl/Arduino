@@ -1,0 +1,62 @@
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+#include <Servo.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+const int sensorPin = 7;
+Servo compuertaContenedor;
+Servo compuertaContenedor2;
+
+int PULSOMIN = 750;   // pulso minimo en microsegundos
+int PULSOMAX = 2400;    // pulso maximo en microsegundos
+
+void setup() {
+lcd.init();
+lcd.backlight();
+lcd.clear();
+Serial.begin(9600);
+compuertaContenedor.attach(5, PULSOMIN, PULSOMAX);
+compuertaContenedor2.attach(6, PULSOMIN, PULSOMAX);
+
+compuertaContenedor.write(90);
+compuertaContenedor2.write(90);
+
+}
+
+void loop() {
+   bool state = digitalRead(sensorPin);
+   
+   Serial.println(state);
+ 
+   if (state == LOW)
+   {
+      lcd.setCursor(0,0);
+      lcd.print("MATERIAL ");
+      lcd.setCursor(0,1);
+      lcd.print("METALICO ");
+      compuertaContenedor.write(0); 
+      compuertaContenedor2.write(180); 
+      delay (5000);
+      compuertaContenedor.write(90);
+      compuertaContenedor2.write(90); 
+      delay (5000);
+      lcd.clear();
+      delay (5);
+      
+    
+   }
+    if (state == HIGH)
+   {
+     lcd.setCursor(0,0);
+     lcd.print("BIENVENIDOS A");
+     lcd.setCursor(0,1);
+     lcd.print("FIUV");
+     compuertaContenedor.write(90);
+     compuertaContenedor2.write(90);
+     delay (2000);
+     lcd.clear();
+     delay (5);     
+     
+   }
+
+}
